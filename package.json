@@ -24,6 +24,7 @@
     "mongoose": "^7.2.0",
     "node": "^20.2.0",
     "nodemon": "^2.0.22",
+    "passport-local-mongoose": "^8.0.0",
     "path": "^0.12.7"
   }
 }
