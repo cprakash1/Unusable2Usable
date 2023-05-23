@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const Usable=require('./usable');
+const Review=require('./buyers');
 const Schema=mongoose.Schema;
 
 // making virtual properties to be transferrable over javascript
@@ -13,7 +13,13 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('thumbnail').get (function(){
     return this.url.replace('/upload','/upload/w_200');
 })
-const UnusableSchema=new Schema({
+ImageSchema.virtual('HomePage').get (function(){
+    return this.url.replace('/upload','/upload/w_400,h_300');
+})
+ImageSchema.virtual('showPage').get (function(){
+    return this.url.replace('/upload','/upload/w_200,h_150');
+})
+const campgroundSchema=new Schema({
     title:String,
     image:[ImageSchema],
     geometry:{
@@ -30,14 +36,14 @@ const UnusableSchema=new Schema({
     price:Number,
     description:String,
     location:String,
-    seller:{
+    author:{
         type:Schema.Types.ObjectId,
         ref:'User'
     },
-    buyers:[
+    reviews:[
         {
             type:Schema.Types.ObjectId,
-            ref:'Usable'
+            ref:'Review'
         }
     ]
 
@@ -45,7 +51,7 @@ const UnusableSchema=new Schema({
 
 //setting up virtual properties
 campgroundSchema.virtual('properties.popUpMarkup').get(function(){
-    let p=`/campground/${this._id}`
+    let p=`/items/${this._id}`
     let z= `<strong><h4><a href=${p}>${this.title}</a></h4><strong><p>${this.description.substring(0,20)}</p>`
     return z
 })
@@ -56,7 +62,7 @@ campgroundSchema.post('findOneAndDelete',async function (doc){
     // console.log(doc);
     if(doc){
         
-        await Usable.deleteMany({
+        await Review.deleteMany({
             _id:{
                 $in:doc.reviews
             }
@@ -64,4 +70,4 @@ campgroundSchema.post('findOneAndDelete',async function (doc){
     }
 })
 
-module.exports=mongoose.model('Unusable',UnusableSchema);
+module.exports=mongoose.model('Campground',campgroundSchema);
