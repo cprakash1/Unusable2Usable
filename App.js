@@ -22,7 +22,7 @@ const User=require('./model/user')
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet=require('helmet');
 const MongoStore=require("connect-mongo");
-
+const {renderForgotPassword,PostForgotpassword}=require('./controller/forgotpassword');
 
 
 app.set('view engine', 'ejs');
@@ -35,7 +35,7 @@ app.use(methodOverride('_method'))
 // const Db_Url='mongodb+srv://root:root@cprakash.rioidal.mongodb.net/?retryWrites=true&w=majority'
 const Db_Url = "mongodb+srv://cprakash:cpprakash@cluster0.i03devl.mongodb.net/?retryWrites=true&w=majority";
 
-// const Db_Url='mongodb://127.0.0.1:27017/yelp-camp';
+// const Db_Url='mongodb://127.0.0.1:27017/Unusable2Usable';
 // mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp', {
 mongoose.connect(Db_Url, {
     useNewUrlParser: true,
@@ -185,6 +185,9 @@ app.get(
         res.render('MainPage',);
     }
 )
+app.route('/forgotpassword')
+    .get(renderForgotPassword)
+    .post(PostForgotpassword)
 app.use('/items',campgroundrouter)
 app.use('/items/:id/reviews',reviewrouter)
 app.use('/',authrouter)

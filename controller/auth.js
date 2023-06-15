@@ -7,7 +7,7 @@ module.exports.renderRegisterForm=(req,res)=>{
 module.exports.submitRegisterForm=async(req,res)=>{
     try{
         const {username,password,email}=req.body;
-        const user=new User({username,email});
+        const user=new User({username,email,password});
         const newuser=await User.register(user,password);
         req.flash('success','Welcome to YelpCamp.You are Successfully Registered and Logging you In!')
         req.login(newuser,err=>{
