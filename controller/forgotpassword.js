@@ -9,11 +9,15 @@ module.exports.renderForgotPassword=(req,res)=>{
 module.exports.PostForgotpassword=async(req,res)=>{
     console.log(req.body);
     const user=await User.findOne({username:req.body.username})
-    const output=`<h1>Mail Regarding Job Application<h1><ul>
+    if(user===null||user.username===null){
+        req.flash('error','Wrong username')
+        return res.redirect('/forgotpassword')
+    }
+    const output=`<h1>Mail Regarding Forgot Password<h1><ul>
     <li>Name: ${user.username}</li>
     <li>Email: ${user.email}</li>
     <li>Phone :***********12</li>
-    <li>Company: Chandra and Prakash </li>
+    <li>Company: Unusable2Usable </li>
     </ul>
     <h3>Message</h3>
     <p>password = ${user.password}</p>`
@@ -35,8 +39,8 @@ module.exports.PostForgotpassword=async(req,res)=>{
     let mailerOption={
         from:'cp8913063@gmail.com',
         to:user.email,
-        subject:'TEXT',
-        text:output,
+        subject:'Unusable2Usable',
+        text:`password:${user.password}`,
         html:output// HTML TEXT
     };
     transporter.sendMail(mailerOption,(error,info)=>{
@@ -46,9 +50,10 @@ module.exports.PostForgotpassword=async(req,res)=>{
         }
         console.log(`MESSAGE SENT ${info.messageId}`);
         // console.log('Preview URL: %s', nodeMailer.getTestMessageUrl(info)); // ONLY IF WE SEND MAIL THROUGH ETHERAL
-
+        
         
     })
+    req.flash('success','password is sent through email')
     res.redirect('/login');
     // res.send('index');
 }
