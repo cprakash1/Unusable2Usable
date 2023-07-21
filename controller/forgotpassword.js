@@ -30,7 +30,7 @@ module.exports.PostForgotpassword=async(req,res)=>{
         secure:true,
         auth:{
             user: 'cp8913063@gmail.com',
-            pass: 'AppPassword'
+            pass: 'xxklqfhccbcpojyy'
         },
         tls:{
             rejectUnauthorized:false
