@@ -40,5 +40,9 @@ const reviewSchema=Joi.object({
         body:Joi.string().required().escapeHTML()
     }).required()
 })
+const changePasswordSchema=Joi.object({
+    newPassword: Joi.string().required().escapeHTML(),
+    confirmPassword: Joi.string().required().escapeHTML(),
+}).required();
 module.exports={campgroundSchema,reviewSchema};
 

@@ -32,12 +32,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-// const Db_Url='mongodb+srv://root:root@cprakash.rioidal.mongodb.net/?retryWrites=true&w=majority'
-const Db_Url = "mongodb+srv://cprakash:cpprakash@cluster0.i03devl.mongodb.net/?retryWrites=true&w=majority";
 
 // const Db_Url='mongodb://127.0.0.1:27017/Unusable2Usable';
 // mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp', {
-mongoose.connect(Db_Url, {
+mongoose.connect(process.env.Db_Url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     // strictQuery:true
@@ -65,7 +63,7 @@ mongoose.connection.once("open", () => {
 
 const sessionopt={
     // name:"ghsdg",
-    store: MongoStore.create({ mongoUrl: Db_Url,touchAfter: 24 * 3600}),
+    store: MongoStore.create({ mongoUrl: process.env.Db_Url,touchAfter: 24 * 3600}),
     secret:'thisisnotagoodsecret',
     resave:false,
     saveUnitialized:true,

@@ -7,12 +7,16 @@ module.exports.renderForgotPassword=(req,res)=>{
     res.render('./user/forgotpassword.ejs');
 }
 module.exports.PostForgotpassword=async(req,res)=>{
-    console.log(req.body);
+    // console.log(req.body);
+
     const user=await User.findOne({username:req.body.username})
     if(user===null||user.username===null){
         req.flash('error','Wrong username')
         return res.redirect('/forgotpassword')
     }
+    const otp=Math.floor(Math.random()*1e6);
+    user.password=otp;
+    user.save();
     const output=`<h1>Mail Regarding Forgot Password<h1><ul>
     <li>Name: ${user.username}</li>
     <li>Email: ${user.email}</li>
@@ -20,7 +24,8 @@ module.exports.PostForgotpassword=async(req,res)=>{
     <li>Company: Unusable2Usable </li>
     </ul>
     <h3>Message</h3>
-    <p>password = ${user.password}</p>`
+    <p>pin = ${otp}
+    </p>`
 
     //creating reusable transporter using default smtp transport
     let transporter=nodeMailer.createTransport({
@@ -29,8 +34,8 @@ module.exports.PostForgotpassword=async(req,res)=>{
         port:465,
         secure:true,
         auth:{
-            user: 'cp8913063@gmail.com',
-            pass: 'xxklqfhccbcpojyy'
+            user: process.env.user,
+            pass: process.env.pass
         },
         tls:{
             rejectUnauthorized:false
@@ -40,7 +45,7 @@ module.exports.PostForgotpassword=async(req,res)=>{
         from:'cp8913063@gmail.com',
         to:user.email,
         subject:'Unusable2Usable',
-        text:`password:${user.password}`,
+        text:`pin:${user.password}`,
         html:output// HTML TEXT
     };
     transporter.sendMail(mailerOption,(error,info)=>{
@@ -54,6 +59,7 @@ module.exports.PostForgotpassword=async(req,res)=>{
         
     })
     req.flash('success','password is sent through email')
-    res.redirect('/login');
+    req.session.changeUser=user._id;
+    res.redirect('/changePassword');
     // res.send('index');
 }
