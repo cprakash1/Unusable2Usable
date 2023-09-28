@@ -4,6 +4,13 @@
     <h1 class="text-center">Unusable2Usable !!!</h1>
     <br><br>
     <!-- <a href="/campground/new">Add campground</a> -->
+    <div class="input-group">
+        <input type="search" id="search-input" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-outline-primary" id="search-button">search</button>
+      </div>
+
+      <br><br>
+    <div id="cp">
     <% for(let c of campground) { %>
         <div class="card mb-3">
             <div class="row">
@@ -26,9 +33,12 @@
                 </div>
             </div>
         </div>
-    <% } %> 
+        <% } %> 
+    </div>
         <script>
             const mapToken="pk.eyJ1IjoiY3ByYWthc2gxIiwiYSI6ImNsZzZpNXBpMjBkZzkzaHFyMm83OGQyN3YifQ.5BnzbS1hsEGKg95hwpbQ7Q";
             const campground='<%- JSON.stringify(campground) %>';
+            const camp= JSON.parse(campground);
         </script>
+        <script src="/javascript/search.js"></script>
     <script src="/javascript/clusterMap.js"></script>
